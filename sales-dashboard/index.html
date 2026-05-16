@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Sales Dashboard</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container dark-mode" id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-chart-pie"></i>
+                <h2>Nexus</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-target="view-dashboard"><i class="fa-solid fa-house"></i> Dashboard</a>
+                <a href="#" class="nav-item" data-target="view-products"><i class="fa-solid fa-box"></i> Products</a>
+                <a href="#" class="nav-item" data-target="view-customers"><i class="fa-solid fa-users"></i> Customers</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="topbar-search">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="topbar-actions">
+                    <select id="month-filter" class="glass-select">
+                        <option value="All">All Months</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April">April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                    </select>
+                    <button id="theme-toggle" class="icon-btn" title="Toggle Light/Dark Mode">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="User">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scroll Area -->
+            <div class="dashboard-scroll-area">
+                
+                <!-- DASHBOARD VIEW -->
+                <div id="view-dashboard" class="view-section active">
+                    <div class="dashboard-header">
+                        <h1>Sales Overview</h1>
+                        <p>Welcome back! Here's your sales performance.</p>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-blue"><i class="fa-solid fa-dollar-sign"></i></div>
+                            <div class="stat-details">
+                                <h3>Total Revenue</h3>
+                                <h2 id="total-revenue">$0</h2>
+                                <p class="trend positive"><i class="fa-solid fa-arrow-up"></i> 12.5% vs last month</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-green"><i class="fa-solid fa-cart-shopping"></i></div>
+                            <div class="stat-details">
+                                <h3>Total Sales</h3>
+                                <h2 id="total-sales">0</h2>
+                                <p class="trend positive"><i class="fa-solid fa-arrow-up"></i> 8.2% vs last month</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-purple"><i class="fa-solid fa-users"></i></div>
+                            <div class="stat-details">
+                                <h3>Active Customers</h3>
+                                <h2 id="active-customers">0</h2>
+                                <p class="trend negative"><i class="fa-solid fa-arrow-down"></i> 2.4% vs last month</p>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-orange"><i class="fa-solid fa-chart-line"></i></div>
+                            <div class="stat-details">
+                                <h3>Conversion Rate</h3>
+                                <h2 id="conversion-rate">0%</h2>
+                                <p class="trend positive"><i class="fa-solid fa-arrow-up"></i> 1.1% vs last month</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Grid -->
+                    <div class="charts-grid">
+                        <div class="chart-card glass-card full-width">
+                            <div class="chart-header"><h3>Revenue Overview (Area Chart)</h3></div>
+                            <div class="chart-body"><canvas id="areaChart"></canvas></div>
+                        </div>
+                        <div class="chart-card glass-card">
+                            <div class="chart-header"><h3>Sales by Category (Bar Chart)</h3></div>
+                            <div class="chart-body"><canvas id="barChart"></canvas></div>
+                        </div>
+                        <div class="chart-card glass-card">
+                            <div class="chart-header"><h3>Customer Growth (Line Chart)</h3></div>
+                            <div class="chart-body"><canvas id="lineChart"></canvas></div>
+                        </div>
+                        <div class="chart-card glass-card">
+                            <div class="chart-header"><h3>Traffic Sources (Doughnut Chart)</h3></div>
+                            <div class="chart-body"><canvas id="doughnutChart"></canvas></div>
+                        </div>
+                        <div class="chart-card glass-card">
+                            <div class="chart-header"><h3>Device Usage (Pie Chart)</h3></div>
+                            <div class="chart-body"><canvas id="pieChart"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODUCTS VIEW -->
+                <div id="view-products" class="view-section hidden">
+                    <div class="dashboard-header">
+                        <h1>Products Catalog</h1>
+                        <p>Manage your store's inventory and view product performance.</p>
+                    </div>
+                    
+                    <div class="glass-card table-container">
+                        <div class="table-header">
+                            <h3>Top Selling Products</h3>
+                            <button class="btn primary-btn"><i class="fa-solid fa-plus"></i> Add Product</button>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Product ID</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-tbody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CUSTOMERS VIEW -->
+                <div id="view-customers" class="view-section hidden">
+                    <div class="dashboard-header">
+                        <h1>Customer Directory</h1>
+                        <p>View and manage customer data and engagement.</p>
+                    </div>
+                    
+                    <div class="glass-card table-container">
+                        <div class="table-header">
+                            <h3>Recent Customers</h3>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Total Orders</th>
+                                    <th>Total Spent</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customers-tbody">
+                                <!-- Populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
