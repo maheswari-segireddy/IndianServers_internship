@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataPro Analytics</title>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+    <div class="app-container" id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-chart-network"></i>
+                <h2>DataPro</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-target="view-dashboard"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+                <a href="#" class="nav-item" data-target="view-upload"><i class="fa-solid fa-file-arrow-up"></i> Data Upload</a>
+                <a href="#" class="nav-item" data-target="view-table"><i class="fa-solid fa-table"></i> Data Table</a>
+                <a href="#" class="nav-item" data-target="view-charts"><i class="fa-solid fa-chart-pie"></i> Visualizations</a>
+                <a href="#" class="nav-item" data-target="view-stats"><i class="fa-solid fa-calculator"></i> Statistics</a>
+                <a href="#" class="nav-item" data-target="view-report"><i class="fa-solid fa-file-pdf"></i> Report Generator</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="theme-toggle" class="btn secondary-btn w-100">
+                    <i class="fa-solid fa-sun"></i> Light Mode
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h2 id="current-view-title">Dashboard Overview</h2>
+                </div>
+                <div class="topbar-actions">
+                    <span id="data-status" class="status-badge status-warning">No Data Loaded</span>
+                    <button id="export-btn" class="btn primary-btn" disabled><i class="fa-solid fa-download"></i> Export CSV</button>
+                </div>
+            </header>
+
+            <div class="scroll-area">
+                
+                <!-- 1. DASHBOARD VIEW -->
+                <div id="view-dashboard" class="view-section active">
+                    <div class="glass-card welcome-card">
+                        <h2>Welcome to DataPro Analytics</h2>
+                        <p>Upload a CSV file to begin analyzing your data. Explore statistics, generate charts, and detect anomalies automatically.</p>
+                        <button class="btn primary-btn mt-3 goto-upload"><i class="fa-solid fa-upload"></i> Upload Data Now</button>
+                    </div>
+
+                    <div class="stats-grid mt-4">
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-blue"><i class="fa-solid fa-table-cells"></i></div>
+                            <div>
+                                <h3>Total Rows</h3>
+                                <h2 id="dash-rows">0</h2>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-green"><i class="fa-solid fa-columns"></i></div>
+                            <div>
+                                <h3>Total Columns</h3>
+                                <h2 id="dash-cols">0</h2>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-purple"><i class="fa-solid fa-hashtag"></i></div>
+                            <div>
+                                <h3>Numeric Columns</h3>
+                                <h2 id="dash-num-cols">0</h2>
+                            </div>
+                        </div>
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-orange"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <div>
+                                <h3>Anomalies Detected</h3>
+                                <h2 id="dash-anomalies">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. UPLOAD VIEW -->
+                <div id="view-upload" class="view-section hidden">
+                    <div class="glass-card upload-container">
+                        <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                        <h2>Upload Dataset</h2>
+                        <p>Select a CSV file from your computer to analyze.</p>
+                        <input type="file" id="csv-file-input" accept=".csv" class="hidden-input">
+                        <label for="csv-file-input" class="btn primary-btn mt-3">Choose File</label>
+                        <p id="upload-msg" class="mt-2 text-sm"></p>
+                    </div>
+                </div>
+
+                <!-- 3 & 5. DATA TABLE & FILTERING VIEW -->
+                <div id="view-table" class="view-section hidden">
+                    <div class="glass-card mb-4 filter-bar">
+                        <div class="filter-group">
+                            <label>Search:</label>
+                            <input type="text" id="table-search" placeholder="Search any column..." class="glass-input">
+                        </div>
+                        <div class="filter-group">
+                            <label>Filter Column:</label>
+                            <select id="filter-col" class="glass-input"><option value="">-- Select --</option></select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Operator:</label>
+                            <select id="filter-op" class="glass-input">
+                                <option value="contains">Contains</option>
+                                <option value="equals">Equals</option>
+                                <option value=">">&gt; Greater</option>
+                                <option value="<">&lt; Less</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Value:</label>
+                            <input type="text" id="filter-val" placeholder="Value" class="glass-input">
+                        </div>
+                        <button id="apply-filter" class="btn primary-btn">Apply</button>
+                        <button id="clear-filter" class="btn secondary-btn">Clear</button>
+                    </div>
+
+                    <div class="glass-card table-container">
+                        <table class="data-table" id="main-data-table">
+                            <thead id="table-head"><tr><th>No Data</th></tr></thead>
+                            <tbody id="table-body"><tr><td>Please upload a CSV file first.</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination mt-3">
+                        <span id="page-info">Showing 0 entries</span>
+                    </div>
+                </div>
+
+                <!-- 4. VISUALIZATIONS VIEW -->
+                <div id="view-charts" class="view-section hidden">
+                    <div class="glass-card mb-4 chart-controls">
+                        <div class="filter-group">
+                            <label>X-Axis (Labels):</label>
+                            <select id="chart-x" class="glass-input"></select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Y-Axis (Values):</label>
+                            <select id="chart-y" class="glass-input"></select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Chart Type:</label>
+                            <select id="chart-type" class="glass-input">
+                                <option value="bar">Bar Chart</option>
+                                <option value="line">Line Chart</option>
+                                <option value="pie">Pie Chart</option>
+                                <option value="doughnut">Doughnut Chart</option>
+                            </select>
+                        </div>
+                        <button id="generate-chart" class="btn primary-btn">Generate</button>
+                    </div>
+
+                    <div class="charts-grid-2">
+                        <div class="glass-card chart-box">
+                            <canvas id="mainChart"></canvas>
+                        </div>
+                        <div class="glass-card summary-box">
+                            <h3>Chart Summary</h3>
+                            <p id="chart-summary-text">Select columns and click Generate to see visualization insights.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7 & 8. STATISTICS & ANOMALIES VIEW -->
+                <div id="view-stats" class="view-section hidden">
+                    <div class="glass-card mb-4">
+                        <h3>Select Numeric Column to Analyze</h3>
+                        <div class="d-flex gap-3 mt-3">
+                            <select id="stat-col" class="glass-input"></select>
+                            <button id="calc-stats" class="btn primary-btn">Calculate</button>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid mb-4">
+                        <div class="stat-card glass-card"><div class="stat-details"><h3>Mean (Average)</h3><h2 id="stat-mean">-</h2></div></div>
+                        <div class="stat-card glass-card"><div class="stat-details"><h3>Median</h3><h2 id="stat-median">-</h2></div></div>
+                        <div class="stat-card glass-card"><div class="stat-details"><h3>Minimum</h3><h2 id="stat-min">-</h2></div></div>
+                        <div class="stat-card glass-card"><div class="stat-details"><h3>Maximum</h3><h2 id="stat-max">-</h2></div></div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h3>Anomaly Detection (Outliers)</h3>
+                        <p class="text-sm text-secondary mb-3">Highlights values > 2 Standard Deviations from the Mean.</p>
+                        <div class="table-container max-h-300">
+                            <table class="data-table">
+                                <thead><tr><th>Row #</th><th>Value</th><th>Deviation Score</th></tr></thead>
+                                <tbody id="anomalies-body">
+                                    <tr><td colspan="3">Run calculation first.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. REPORT VIEW -->
+                <div id="view-report" class="view-section hidden">
+                    <div class="mb-4 d-flex justify-between">
+                        <h2>Generated Report</h2>
+                        <button id="print-report" class="btn primary-btn"><i class="fa-solid fa-print"></i> Print / Save PDF</button>
+                    </div>
+                    <div class="glass-card report-paper" id="report-content">
+                        <div class="report-header text-center mb-4">
+                            <h1>DataPro Executive Summary</h1>
+                            <p id="report-date"></p>
+                        </div>
+                        <hr>
+                        <div class="report-section mt-4">
+                            <h3>Dataset Overview</h3>
+                            <p><strong>Total Records:</strong> <span id="rep-rows">0</span></p>
+                            <p><strong>Total Columns:</strong> <span id="rep-cols">0</span></p>
+                        </div>
+                        <div class="report-section mt-4">
+                            <h3>Column Signatures</h3>
+                            <ul id="rep-col-list"></ul>
+                        </div>
+                        <div class="report-section mt-4">
+                            <h3>Anomaly Alert Summary</h3>
+                            <p id="rep-anomalies-text">No anomalies detected yet. Run statistical analysis to populate.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

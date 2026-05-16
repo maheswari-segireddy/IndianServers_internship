@@ -1,0 +1,21 @@
+ID,Date,Product,Region,SalesAmount,UnitsSold,CustomerRating
+1,2023-01-01,Laptop,North,1200,1,4.5
+2,2023-01-02,Mouse,South,25,1,4.8
+3,2023-01-02,Keyboard,East,45,2,4.1
+4,2023-01-03,Monitor,West,300,1,3.9
+5,2023-01-03,Laptop,North,1200,1,5.0
+6,2023-01-04,Mouse,North,50,2,4.6
+7,2023-01-04,Webcam,South,80,1,4.2
+8,2023-01-05,Laptop,East,2400,2,4.9
+9,2023-01-05,Desk Chair,West,150,1,3.5
+10,2023-01-06,Keyboard,North,90,4,4.4
+11,2023-01-07,Monitor,South,600,2,4.7
+12,2023-01-08,Webcam,East,80,1,4.1
+13,2023-01-09,Laptop,West,1200,1,4.8
+14,2023-01-10,Mouse,North,25,1,4.5
+15,2023-01-11,Laptop,South,1200,1,4.9
+16,2023-01-12,ServerRack,North,9500,1,4.9
+17,2023-01-13,Keyboard,West,45,1,4.3
+18,2023-01-14,Monitor,East,300,1,4.6
+19,2023-01-15,Mouse,South,25,1,4.2
+20,2023-01-16,Laptop,West,1200,1,4.7
