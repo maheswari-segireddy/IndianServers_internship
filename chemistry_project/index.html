@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chemistry Structure Studio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">&#9879;</div>
+      <div>
+        <h1>Chemistry Structure Studio</h1>
+        <p>Start with elements, then explore molecules in 3D</p>
+      </div>
+    </div>
+    <nav class="top-nav" aria-label="Studio navigation">
+      <button type="button" data-scroll-target="periodicTableSection">Periodic Table</button>
+      <button type="button" data-scroll-target="moleculeCanvas">3D Molecules</button>
+      <button type="button" data-scroll-target="quickFacts">Notebook</button>
+    </nav>
+  </header>
+
+  <main class="studio-shell">
+    <aside class="left-panel" aria-label="Chemistry models">
+      <div class="panel-title">Molecule Types</div>
+      <label class="search-wrap">
+        <span aria-hidden="true">&#8981;</span>
+        <input id="searchInput" type="search" placeholder="Search molecules..." />
+      </label>
+      <div class="chip-row" id="categoryChips" aria-label="Categories"></div>
+      <div class="model-list" id="modelList"></div>
+    </aside>
+
+    <section class="stage-column">
+      <section class="periodic-section" id="periodicTableSection" aria-label="Interactive periodic table">
+        <div class="periodic-head">
+          <div>
+            <p class="section-kicker">Element Explorer</p>
+            <h2>Periodic Table</h2>
+            <p>Search an element, filter by family, then tap a tile to see what it means in simple terms.</p>
+          </div>
+          <label class="element-search">
+            <span aria-hidden="true">&#8981;</span>
+            <input id="elementSearch" type="search" placeholder="Search element, symbol, or number..." />
+          </label>
+        </div>
+
+        <div class="periodic-controls">
+          <div class="element-filter-row" id="elementFilters" aria-label="Element family filters"></div>
+          <div class="periodic-tools" aria-label="Periodic table tools">
+            <button id="highlightStates" type="button">States</button>
+            <button id="resetElements" type="button">Reset</button>
+          </div>
+        </div>
+
+        <div class="element-legend" id="elementLegend" aria-label="Element category legend"></div>
+        <div class="periodic-table-wrap">
+          <div class="periodic-table" id="periodicTable" role="grid" aria-label="Periodic table of elements"></div>
+        </div>
+
+        <div class="element-insight">
+          <article class="element-detail-card" aria-live="polite">
+            <div class="element-detail-top">
+              <div class="selected-symbol" id="selectedSymbol">H</div>
+              <div>
+                <p id="selectedNumber">Atomic number 1</p>
+                <h3 id="selectedName">Hydrogen</h3>
+                <span id="selectedCategory">Reactive nonmetal</span>
+              </div>
+            </div>
+            <dl id="selectedElementFacts"></dl>
+          </article>
+          <article class="learning-card">
+            <h3>Understand the Pattern</h3>
+            <div class="learning-steps">
+              <button type="button" data-lesson="groups" class="active">Groups</button>
+              <button type="button" data-lesson="periods">Periods</button>
+              <button type="button" data-lesson="metals">Metals</button>
+            </div>
+            <p id="lessonText"></p>
+          </article>
+        </div>
+      </section>
+
+      <div class="model-heading">
+        <div>
+          <h2 id="modelName">Water Molecule</h2>
+          <p id="modelSubtitle">H2O / Polar covalent molecule</p>
+        </div>
+        <div class="tip-card">Tip: Drag to rotate. Scroll to zoom.</div>
+      </div>
+
+      <section class="viewer-card" aria-label="Interactive molecule viewer">
+        <div class="viewer-actions">
+          <button id="autoRotateBtn" type="button" class="active">Auto Rotate</button>
+          <button id="bondLabelBtn" type="button">Bond Labels</button>
+        </div>
+        <canvas id="moleculeCanvas" width="1120" height="680"></canvas>
+        <div class="canvas-toolbar" aria-label="Viewer tools">
+          <button id="resetView" type="button" title="Reset view">&#8634;</button>
+          <button id="zoomOut" type="button" title="Zoom out">&minus;</button>
+          <button id="zoomIn" type="button" title="Zoom in">+</button>
+          <button id="toggleMarkers" type="button" title="Toggle markers">&#9678;</button>
+          <button id="downloadView" type="button" title="Download image">&#8681;</button>
+        </div>
+      </section>
+
+      <div class="summary-row">
+        <div id="modelUse">Essential solvent for reactions, transport, and thermal regulation.</div>
+        <div id="modelParts">Oxygen / Hydrogen / Polar bonds</div>
+      </div>
+
+      <section class="lower-grid" aria-label="Chemistry notes">
+        <article>
+          <h3>Particle View</h3>
+          <div class="tile-strip" id="particleTiles"></div>
+        </article>
+        <article>
+          <h3>Compare</h3>
+          <div class="compare-row">
+            <span id="compareName">Water</span>
+            <span id="compareFormula">H2O</span>
+          </div>
+          <div class="compare-row">
+            <span>Bond type</span>
+            <span id="compareBond">Polar covalent</span>
+          </div>
+        </article>
+        <article>
+          <h3>Quick Facts</h3>
+          <ul id="quickFacts"></ul>
+        </article>
+      </section>
+
+    </section>
+
+    <aside class="right-panel" aria-label="Structure details">
+      <section class="detail-card">
+        <div class="detail-head">
+          <div class="detail-icon" aria-hidden="true">&#9671;</div>
+          <div>
+            <h3 id="detailTitle">Oxygen Atom</h3>
+            <p id="detailSubtitle">Central atom</p>
+          </div>
+        </div>
+        <dl id="detailList"></dl>
+        <button id="showMarkersBtn" type="button" class="marker-button">Show markers</button>
+      </section>
+
+      <section class="knowledge-card">
+        <h3>Knowledge Base</h3>
+        <p id="knowledgeText"></p>
+        <div id="knowledgeItems" class="knowledge-items"></div>
+      </section>
+
+      <section class="knowledge-card">
+        <h3>Chemistry Notes</h3>
+        <p id="chemistryNotes"></p>
+      </section>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
